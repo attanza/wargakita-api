@@ -33,6 +33,7 @@ export class BaseDbService {
     const totalPage = Math.ceil(total / limit);
     const hasNextPage = page < totalPage;
     const hasPrevPage = page > 1;
+    const nextPage = page >= totalPage ? null : page + 1;
     const items = await this.models
       .find()
       .select(mongooseSelection)
@@ -48,6 +49,7 @@ export class BaseDbService {
       totalPage,
       hasNextPage,
       hasPrevPage,
+      nextPage,
     };
   }
 

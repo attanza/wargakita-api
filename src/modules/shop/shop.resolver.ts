@@ -24,16 +24,11 @@ export class ShopResolver {
   constructor(private readonly service: ShopService) {}
 
   @Query(() => PaginatedShopResponse)
-  async shopPaginate(
-    @Args('queries', { nullable: true }) paginationInput: PaginationInput,
+  async shops(
+    @Args() paginationInput: PaginationInput,
     @Info() info: GraphQLResolveInfo,
   ) {
     return this.service.paginate(paginationInput, info);
-  }
-
-  @Query(() => [Shop])
-  async shops(): Promise<Shop[]> {
-    return this.service.findAll();
   }
 
   @Query(() => Shop, { nullable: true })

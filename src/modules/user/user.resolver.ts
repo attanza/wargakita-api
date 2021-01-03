@@ -1,18 +1,34 @@
 import { ValidationPipe } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Info,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { UserInputError } from 'apollo-server-express';
+import { GraphQLResolveInfo } from 'graphql';
+import PaginatedResponse from 'src/shared/paginatedResponse';
+import { PaginationInput } from 'src/shared/pagination.input';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
 import { User } from './user.schema';
 import { UserService } from './user.service';
 
+@ObjectType()
+export class PaginatedUserResponse extends PaginatedResponse(User) {}
+
 @Resolver()
 export class UserResolver {
   constructor(private readonly service: UserService) {}
 
-  @Query(() => [User])
-  async users(): Promise<User[]> {
-    return this.service.findAll();
+  @Query(() => PaginatedUserResponse)
+  async users(
+    @Args() paginationInput: PaginationInput,
+    @Info() info: GraphQLResolveInfo,
+  ): Promise<User[]> {
+    return this.service.paginate(paginationInput, info);
   }
 
   @Query(() => User, { nullable: true })

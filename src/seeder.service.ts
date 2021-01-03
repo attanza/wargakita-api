@@ -15,8 +15,8 @@ export class SeederService {
         location: {
           type: 'Point',
           coordinates: [
-            parseFloat(faker.address.latitude()),
             parseFloat(faker.address.longitude()),
+            parseFloat(faker.address.latitude()),
           ],
         },
         category: faker.vehicle.type(),
