@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+  mongo:
+    image: mongo:4.4.2-bionic
+    restart: unless-stopped
+    volumes:
+      - /home/ubuntu/volumes/mongo:/data/db
+    ports:
+      - 27017:27017
+
+  wargakita:
+    build: ./
+    depends_on:
+      - mongo
+    ports:
+      - '12000:12000'
